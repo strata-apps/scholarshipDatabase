@@ -1,4 +1,4 @@
-import { Badge } from './badge.js';
+import { Badge } from './Badge.js';
 import { isFavorited, toggleFavorite } from './storage.js';
 import { formatDate, daysUntil } from './format.js';
 
