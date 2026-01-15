@@ -37,7 +37,7 @@ export function FiltersPanel({ state, onUpdate, onReset }) {
   });
 
   // Search
-  body.appendChild(state.searchNode);
+  body.appendChild(state.searchNode.node);
 
   // Region
   const region = document.createElement('div');
@@ -162,7 +162,13 @@ export function FiltersPanel({ state, onUpdate, onReset }) {
   apply.textContent = 'Apply';
 
   reset.addEventListener('click', onReset);
-  apply.addEventListener('click', () => onUpdate({})); // triggers rerender
+  apply.addEventListener('click', () => {
+    onUpdate({
+      q: state.searchNode.getValue()
+    });
+    document.body.classList.remove('filters-open'); // optional UX
+  });
+
 
   btnRow.appendChild(reset);
   btnRow.appendChild(apply);

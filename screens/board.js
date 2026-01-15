@@ -25,13 +25,13 @@ export function loadScholarships(mount, scholarships, rerenderApp) {
     new Set(scholarships.map((s) => s.region).filter(Boolean).map((x) => x.trim()))
   ).sort((a, b) => a.localeCompare(b));
 
-  function mountFloatingFilters(searchNode) {
+  function mountFloatingFilters(search) {
   // remove existing drawer (avoid duplicates on rerender)
   document.querySelectorAll('.filters-panel').forEach((n) => n.remove());
 
   const drawer = FiltersPanel({
     state: {
-      searchNode,
+      searchNode: search,
       region: state.region,
       regionOptions,
       gpaMin: state.gpaMin,
@@ -51,6 +51,7 @@ export function loadScholarships(mount, scholarships, rerenderApp) {
       state.grantOnly = false;
       Object.keys(state.citizenship).forEach((k) => (state.citizenship[k] = false));
       state.sort = 'newestClose';
+      search.setValue('');
       render();
     }
   });
@@ -196,17 +197,12 @@ export function loadScholarships(mount, scholarships, rerenderApp) {
     page.className = 'page';
 
     // Search node used inside FiltersPanel
-    const searchNode = SearchBar({
-      value: state.q,
-      onChange: (v) => {
-        state.q = v;
-        render();
-      }
-    });
+    const search = SearchBar({ value: state.q });
+
 
     const left = FiltersPanel({
       state: {
-        searchNode,
+        searchNode: search,
         region: state.region,
         regionOptions,
         gpaMin: state.gpaMin,

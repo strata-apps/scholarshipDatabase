@@ -1,4 +1,4 @@
-export function SearchBar({ value = '', onChange }) {
+export function SearchBar({ value = '' }) {
   const field = document.createElement('div');
   field.className = 'field';
 
@@ -8,11 +8,16 @@ export function SearchBar({ value = '', onChange }) {
   const input = document.createElement('input');
   input.className = 'input';
   input.placeholder = 'Scholarship name, tag, region, requirements…';
-  input.value = value;
 
-  input.addEventListener('input', () => onChange(input.value));
+  // LOCAL draft value (not applied yet)
+  input.value = value;
 
   field.appendChild(label);
   field.appendChild(input);
-  return field;
+
+  return {
+    node: field,
+    getValue: () => input.value,
+    setValue: (v) => { input.value = v ?? ''; }
+  };
 }
