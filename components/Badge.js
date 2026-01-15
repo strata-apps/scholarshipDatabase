@@ -3,4 +3,4 @@ export function Badge(text) {
   el.className = 'badge';
   el.textContent = text;
   return el;
-}
+} 
