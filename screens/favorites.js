@@ -1,6 +1,8 @@
-import { ScholarshipGrid } from '../components/ScholarshipGrid.js';
+// screens/favorites.js
 import { Modal } from '../components/Modal.js';
-import { getFavorites, clearFavorites } from '../components/storage.js';
+import { getFavorites, clearFavorites, toggleFavorite } from '../components/storage.js';
+import { ProgressCheck } from '../components/progressCheck.js';
+import { StatusButton } from '../components/statusButton.js';
 
 export function renderFavoritesScreen(mount, scholarships, rerenderApp) {
   function openDetails(item) {
@@ -14,7 +16,6 @@ export function renderFavoritesScreen(mount, scholarships, rerenderApp) {
     const req = document.createElement('div');
     req.className = 'kv';
     req.innerHTML = `<h4>Requirements</h4><p>${escapeHtml(item.requirements || '—')}</p>`;
-
     left.appendChild(req);
 
     const right = document.createElement('div');
@@ -75,6 +76,16 @@ export function renderFavoritesScreen(mount, scholarships, rerenderApp) {
     const favIds = new Set(getFavorites());
     const favItems = scholarships.filter((s) => favIds.has(s.id));
 
+    // (NEW) progress check at the top of the favorites screen
+    const progress = ProgressCheck({
+      favItems,
+      onChanged: () => {
+        // goal change or status map change: update bars + keep UI consistent
+        progress.__pcRefresh?.();
+      }
+    });
+    main.appendChild(progress);
+
     const toolbar = document.createElement('div');
     toolbar.className = 'toolbar';
     toolbar.innerHTML = `
@@ -86,15 +97,94 @@ export function renderFavoritesScreen(mount, scholarships, rerenderApp) {
         <a class="btn secondary" href="#/board" style="padding:8px 12px; margin-bottom: 20px;">Back to Board</a>
       </div>
     `;
-
     main.appendChild(toolbar);
-    main.appendChild(
-      ScholarshipGrid({
-        items: favItems,
-        onOpen: openDetails,
-        onFavoriteChanged: rerenderApp
-      })
-    );
+
+    // (NEW) Render grid directly (so we can attach StatusButton per card)
+    const grid = document.createElement('div');
+    grid.className = 'grid';
+
+    if (!favItems.length) {
+      const empty = document.createElement('div');
+      empty.className = 'empty';
+      empty.textContent = 'No favorites yet. Go back to the board and heart scholarships to save them.';
+      main.appendChild(empty);
+    } else {
+      favItems.forEach((item) => {
+        const card = document.createElement('article');
+        card.className = 'card';
+
+        const top = document.createElement('div');
+        top.className = 'card-top';
+
+        const title = document.createElement('div');
+        title.className = 'card-title';
+        title.textContent = item.name || 'Scholarship';
+
+        const sub = document.createElement('div');
+        sub.className = 'card-sub';
+        sub.textContent = [item.region, item.closeDate ? `Closes ${item.closeDate}` : null]
+          .filter(Boolean)
+          .join(' • ') || '—';
+
+        top.appendChild(title);
+        top.appendChild(sub);
+
+        const mid = document.createElement('div');
+        mid.className = 'card-mid';
+
+        const badge = document.createElement('span');
+        badge.className = 'badge';
+        badge.textContent = item.amount ? `Amount: ${item.amount}` : 'Amount: —';
+
+        mid.appendChild(badge);
+
+        const actions = document.createElement('div');
+        actions.className = 'fav-actions';
+
+        const leftActions = document.createElement('div');
+        leftActions.style.display = 'flex';
+        leftActions.style.gap = '10px';
+        leftActions.style.flexWrap = 'wrap';
+
+        const viewBtn = document.createElement('button');
+        viewBtn.className = 'btn secondary';
+        viewBtn.type = 'button';
+        viewBtn.textContent = 'View';
+        viewBtn.addEventListener('click', () => openDetails(item));
+
+        const unfavBtn = document.createElement('button');
+        unfavBtn.className = 'btn secondary';
+        unfavBtn.type = 'button';
+        unfavBtn.textContent = 'Unfavorite';
+        unfavBtn.addEventListener('click', () => {
+          toggleFavorite(item.id);
+          rerenderApp(); // will rerender favorites screen + top nav count
+        });
+
+        leftActions.appendChild(viewBtn);
+        leftActions.appendChild(unfavBtn);
+
+        // (NEW) status selector
+        const status = StatusButton({
+          id: item.id,
+          onChange: () => {
+            // status affects purple/green totals; refresh the bars
+            progress.__pcRefresh?.();
+          }
+        });
+
+        actions.appendChild(leftActions);
+        actions.appendChild(status);
+
+        card.appendChild(top);
+        card.appendChild(mid);
+        card.appendChild(actions);
+
+        grid.appendChild(card);
+      });
+
+      main.appendChild(grid);
+    }
 
     page.appendChild(left);
     page.appendChild(main);
@@ -118,5 +208,7 @@ function kv(title, val) {
 }
 
 function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, (m) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m]));
+  return String(s).replace(/[&<>"']/g, (m) => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+  }[m]));
 }

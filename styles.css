@@ -570,3 +570,159 @@ body.filters-open .filters-overlay{
 body.modal-open{
   overflow: hidden;
 }
+
+/* =========================================================
+   Favorites: Goal Tracker (ProgressCheck) + StatusButton
+   ========================================================= */
+
+.pc.card{
+  padding: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.pc-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.pc-title{
+  font-size: 14px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-weight: 900;
+}
+
+.pc-controls{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content:flex-end;
+}
+
+.pc-pill{
+  display:inline-block;
+  padding: 6px 10px;
+  border: 2px solid var(--line-strong);
+  background: rgba(0,0,0,0.04);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  box-shadow: 2px 2px 0 var(--secondary-accent);
+}
+
+.pc-sub{
+  margin: 0 0 var(--space-sm);
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.2px;
+}
+
+.pc-goal-select{
+  width: auto;
+  min-width: 190px;
+  border: 2px solid var(--line-strong);
+  box-shadow: 2px 2px 0 var(--primary-accent);
+  padding: 8px 10px;
+  background: var(--paper-bg);
+}
+
+.pc-bar{
+  position: relative;
+  height: 18px;
+  border: 2px solid var(--line-strong);
+  background: rgba(0,0,0,0.05);
+  box-shadow: 3px 3px 1px var(--shadow-accent),
+              3px 3px 1px 2px var(--line-strong);
+  overflow: hidden;
+}
+
+.pc-fill{
+  position:absolute;
+  left:0; top:0; bottom:0;
+  width:0%;
+  transition: width 0.25s ease;
+}
+
+.pc-fill--purple{
+  background: #7C3AED; /* purple */
+}
+
+.pc-fill--green{
+  background: #16A34A; /* green */
+  opacity: 0.95;
+}
+
+.pc-stats{
+  margin-top: var(--space-sm);
+  display:flex;
+  flex-direction:column;
+  gap: 6px;
+}
+
+.pc-row{
+  display:flex;
+  align-items:center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.pc-row--muted{
+  color: var(--muted);
+}
+
+.pc-dot{
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--line-strong);
+  display:inline-block;
+  box-shadow: 1px 1px 0 var(--secondary-accent);
+}
+
+.pc-dot--purple{ background:#7C3AED; }
+.pc-dot--green{ background:#16A34A; }
+
+.pc-note{
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* Status button */
+.sb{
+  display:inline-flex;
+  align-items:center;
+}
+
+.sb-select{
+  width: auto;
+  border: 2px solid var(--line-strong);
+  padding: 8px 10px;
+  background: var(--paper-bg);
+  box-shadow: 2px 2px 0 var(--primary-accent);
+}
+
+.sb--applied .sb-select{
+  box-shadow: 2px 2px 0 var(--primary-accent);
+}
+
+.sb--received .sb-select{
+  box-shadow: 2px 2px 0 #16A34A;
+}
+
+.sb--denied .sb-select{
+  box-shadow: 2px 2px 0 #EF4444;
+}
+
+/* Card footer row on favorites */
+.fav-actions{
+  margin-top: var(--space-sm);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
