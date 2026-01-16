@@ -63,7 +63,6 @@ export function renderFavoritesScreen(mount, scholarships, rerenderApp) {
     left.innerHTML = `
       <div class="panel-header">
         <p class="panel-title">Favorites</p>
-        <p class="panel-sub">Scholarships you’ve saved locally on this device.</p>
       </div>
       <div class="panel-body">
         <button class="btn secondary" id="clearFavs">Clear favorites</button>
@@ -93,7 +92,6 @@ export function renderFavoritesScreen(mount, scholarships, rerenderApp) {
         <div class="kpi" style="margin-bottom: 20px;">Saved <span>${favItems.length}</span> scholarships</div>
       </div>
       <div class="sort">
-        <span>Browse:</span>
         <a class="btn secondary" href="#/board" style="padding:8px 12px; margin-bottom: 20px;">Back to Board</a>
       </div>
     `;
@@ -106,7 +104,7 @@ export function renderFavoritesScreen(mount, scholarships, rerenderApp) {
     if (!favItems.length) {
       const empty = document.createElement('div');
       empty.className = 'empty';
-      empty.textContent = 'No favorites yet. Go back to the board and heart scholarships to save them.';
+      empty.textContent = '';
       main.appendChild(empty);
     } else {
       favItems.forEach((item) => {
