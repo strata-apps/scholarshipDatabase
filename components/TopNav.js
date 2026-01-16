@@ -8,7 +8,7 @@ export function TopNav({ active = '#/board', favoritesCount = 0 }) {
   const brand = document.createElement('a');
   brand.className = 'brand';
   brand.href = '#/board';
-  brand.innerHTML = `<div class="brand-badge"></div><div>Camp Cat Scholarship Database</div>`;
+  brand.innerHTML = `<div class="brand-badge"></div><div>The Scholarship Database</div>`;
 
   const links = document.createElement('div');
   links.className = 'navlinks';
