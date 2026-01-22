@@ -4,18 +4,17 @@ import { loadScholarships } from './screens/board.js';
 import { renderFavoritesScreen } from './screens/favorites.js';
 import { getFavorites } from './components/storage.js';
 
+import renderLoginScreen from './screens/login.js';
+import { isAuthed, getSession, clearSession } from './components/auth.js';
+
 const app = document.getElementById('app');
 
 let scholarshipsCache = null;
 
 /* ------------------------------
    Filters drawer “chrome”
-   - overlay click closes
-   - ESC closes
-   - mobile button opens
 --------------------------------*/
 function ensureFiltersChrome() {
-  // Overlay (click to close)
   if (!document.querySelector('.filters-overlay')) {
     const overlay = document.createElement('div');
     overlay.className = 'filters-overlay';
@@ -25,7 +24,6 @@ function ensureFiltersChrome() {
     document.body.appendChild(overlay);
   }
 
-  // ESC closes
   if (!window.__filtersEscBound) {
     window.__filtersEscBound = true;
     document.addEventListener('keydown', (e) => {
@@ -33,20 +31,13 @@ function ensureFiltersChrome() {
     });
   }
 
-  // Mobile "Filters" button (only visually appears on small screens via CSS)
   if (!document.querySelector('.filters-toggle')) {
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'btn secondary filters-toggle';
     btn.textContent = 'Filters';
     btn.setAttribute('aria-label', 'Open filters');
-
-    btn.addEventListener('click', () => {
-      document.body.classList.add('filters-open');
-    });
-
-    // Put it in the body so it persists across route rerenders
-    // If you'd rather place it in the toolbar, we can move it later.
+    btn.addEventListener('click', () => document.body.classList.add('filters-open'));
     document.body.appendChild(btn);
   }
 }
@@ -60,23 +51,49 @@ async function ensureData() {
   return scholarshipsCache;
 }
 
+function safeRedirect(hash) {
+  if (window.location.hash !== hash) window.location.hash = hash;
+}
+
 function route() {
-  const hash = window.location.hash || '#/board';
+  const hash = window.location.hash || '#/login';
   const base = hash.split('?')[0];
 
-  // Make sure mobile drawer helpers exist once
   ensureFiltersChrome();
-
-  // Any route change should close the drawer (feels natural on mobile)
   document.body.classList.remove('filters-open');
 
+  // ---- Auth gating ----
+  const authed = isAuthed();
+
+  // If not authed, only allow login route
+  if (!authed && base !== '#/login') {
+    safeRedirect('#/login');
+    return;
+  }
+
+  // If authed and they go to login, send them to board
+  if (authed && base === '#/login') {
+    safeRedirect('#/board');
+    return;
+  }
+
   app.innerHTML = '';
-  app.appendChild(
-    TopNav({
-      active: base,
-      favoritesCount: getFavorites().length,
-    })
-  );
+
+  // Only show TopNav when signed in
+  if (authed) {
+    app.appendChild(
+      TopNav({
+        active: base,
+        favoritesCount: getFavorites().length,
+        // OPTIONAL: if your TopNav supports extra actions later
+        user: getSession(),
+        onLogout: () => {
+          clearSession();
+          safeRedirect('#/login');
+        },
+      })
+    );
+  }
 
   const shell = document.createElement('div');
   shell.className = 'shell';
@@ -86,11 +103,16 @@ function route() {
   shell.appendChild(mount);
 
   (async () => {
+    if (base === '#/login') {
+      renderLoginScreen(mount, () => safeRedirect('#/board'));
+      return;
+    }
+
     const scholarships = await ensureData();
+
     if (base === '#/favorites') {
       renderFavoritesScreen(mount, scholarships, () => route());
     } else {
-      // default board
       loadScholarships(mount, scholarships, () => route());
     }
   })().catch((e) => {
@@ -99,5 +121,5 @@ function route() {
 }
 
 window.addEventListener('hashchange', route);
-window.addEventListener('storage', route); // if multiple tabs
+window.addEventListener('storage', route);
 route();

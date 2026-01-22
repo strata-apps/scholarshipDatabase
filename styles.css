@@ -726,3 +726,14 @@ body.modal-open{
   gap: 10px;
   flex-wrap: wrap;
 }
+
+/* Auth page tweaks */
+.page[style*="grid-template-columns: 1fr"]{
+  margin-top: 28px;
+}
+
+.panel form{
+  display:flex;
+  flex-direction:column;
+  gap: 12px;
+}
