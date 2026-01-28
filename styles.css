@@ -149,6 +149,11 @@ a {
   }
 }
 
+/* Single-column pages (Dashboard, Login, etc.) */
+.page.page--single{
+  grid-template-columns: 1fr;
+}
+
 /* ---------------------------------------------------------
    Panels
 --------------------------------------------------------- */
@@ -737,3 +742,72 @@ body.modal-open{
   flex-direction:column;
   gap: 12px;
 }
+.topnav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.topnav-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.navlinks {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logout-btn {
+  white-space: nowrap;
+}
+
+
+/* ------------------------------
+   Dashboard layout
+--------------------------------*/
+
+.dashboard-wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 22px 18px 44px;
+}
+
+.dashboard-kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 420px);
+  gap: 22px;
+  align-items: start;
+}
+
+.dashboard-col {
+  display: grid;
+  gap: 18px;
+}
+
+/* A shared helper for scrollable dashboard sections */
+.dashboard-scroll {
+  scrollbar-gutter: stable;
+}
+
+@media (max-width: 900px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+
+
+
+
+

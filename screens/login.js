@@ -1,12 +1,6 @@
 // screens/login.js
-import { setSession, getLocalUsers, setLocalUsers } from '../components/auth.js';
-
-async function sha256(text) {
-  const enc = new TextEncoder().encode(text);
-  const buf = await crypto.subtle.digest('SHA-256', enc);
-  const bytes = Array.from(new Uint8Array(buf));
-  return bytes.map(b => b.toString(16).padStart(2, '0')).join('');
-}
+import { supabase } from '../components/lib/supabase.js';
+import { setSessionFromSupabase } from '../components/auth.js';
 
 function el(tag, attrs = {}, ...kids) {
   const n = document.createElement(tag);
@@ -59,22 +53,19 @@ export default function renderLoginScreen(mount, onAuthed) {
 
     if (!email || !pw) return setMsg('error', 'Please enter email and password.');
 
-    const users = getLocalUsers();
-    const found = users.find(u => (u.email || '').toLowerCase() === email);
-    if (!found) return setMsg('error', 'No account found for that email.');
-
-    const hash = await sha256(pw);
-    if (hash !== found.password_hash) return setMsg('error', 'Incorrect password.');
-
-    // Session payload (safe fields only)
-    setSession({
-      id: found.id,
-      email: found.email,
-      first_name: found.first_name,
-      last_name: found.last_name,
-      organization: found.organization,
-      signed_in_at: new Date().toISOString(),
+    const { data, error: err } = await supabase.auth.signInWithPassword({
+      email,
+      password: pw,
     });
+
+    if (err) return setMsg('error', err.message);
+
+    // sync local cache + route
+    await setSessionFromSupabase();
+
+    if (!data?.session) {
+      return setMsg('error', 'Signed in, but no session returned. Check your Supabase Auth settings.');
+    }
 
     onAuthed?.();
   };
@@ -93,33 +84,30 @@ export default function renderLoginScreen(mount, onAuthed) {
     if (!first || !last || !email || !pw) return setMsg('error', 'Please complete all fields.');
     if (pw.length < 8) return setMsg('error', 'Password must be at least 8 characters.');
 
-    const users = getLocalUsers();
-    if (users.some(u => (u.email || '').toLowerCase() === email)) {
-      return setMsg('error', 'An account with that email already exists.');
-    }
-
-    const password_hash = await sha256(pw);
-    const newUser = {
-      id: crypto.randomUUID(),
-      first_name: first,
-      last_name: last,
+    const { data, error: err } = await supabase.auth.signUp({
       email,
-      password_hash,
-      organization: org,
-      created_at: new Date().toISOString(),
-    };
-
-    setLocalUsers([newUser, ...users]);
-
-    // auto-login after register
-    setSession({
-      id: newUser.id,
-      email: newUser.email,
-      first_name: newUser.first_name,
-      last_name: newUser.last_name,
-      organization: newUser.organization,
-      signed_in_at: new Date().toISOString(),
+      password: pw,
+      options: {
+        // stored in auth.users.user_metadata
+        data: { first_name: first, last_name: last, organization: org },
+      },
     });
+
+    if (err) return setMsg('error', err.message);
+
+    // If email confirmations are truly OFF, you'll usually get a session immediately.
+    // If confirmations are ON, session may be null and user must confirm.
+    await setSessionFromSupabase();
+
+    if (!data?.session) {
+      setMsg(
+        'success',
+        'Account created. If email confirmation is enabled, check your inbox to confirm before signing in.'
+      );
+      mode = 'login';
+      rerender();
+      return;
+    }
 
     onAuthed?.();
   };
@@ -130,9 +118,10 @@ export default function renderLoginScreen(mount, onAuthed) {
     const msgBox = (error || success)
       ? el('div', { class: 'panel', style: { marginBottom: '16px' } },
           el('div', { class: 'panel-body' },
-            el('div', { class: 'badge', style: { background: error ? 'rgba(239,68,68,0.12)' : 'rgba(34,197,94,0.12)' } },
-              error || success
-            )
+            el('div', {
+              class: 'badge',
+              style: { background: error ? 'rgba(239,68,68,0.12)' : 'rgba(34,197,94,0.12)' }
+            }, error || success)
           )
         )
       : null;
@@ -231,8 +220,8 @@ export default function renderLoginScreen(mount, onAuthed) {
 
     const card = el('div', { class: 'panel', style: { maxWidth: '720px', margin: '0 auto' } },
       el('div', { class: 'panel-header' },
-        el('h3', { class: 'panel-title' }, 'Scholarship Database Access'),
-        el('div', { class: 'panel-sub' }, 'Sign in to view scholarships and favorites.')
+        el('h3', { class: 'panel-title' }, 'Welcome to the Scholarship Database'),
+        el('div', { class: 'panel-sub' }, 'Sign in or register to continue.')
       ),
       el('div', { class: 'panel-body' },
         tabs,
@@ -240,7 +229,6 @@ export default function renderLoginScreen(mount, onAuthed) {
       )
     );
 
-    // Layout wrapper consistent with your app
     const page = el('div', { class: 'page', style: { gridTemplateColumns: '1fr' } },
       el('div', { class: 'panel-stack' }, msgBox, card)
     );

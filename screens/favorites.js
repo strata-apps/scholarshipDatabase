@@ -3,6 +3,7 @@ import { Modal } from '../components/Modal.js';
 import { getFavorites, clearFavorites, toggleFavorite } from '../components/storage.js';
 import { ProgressCheck } from '../components/progressCheck.js';
 import { StatusButton } from '../components/statusButton.js';
+import { FavoritesExportButton } from '../components/favoritesExport.js';
 
 export function renderFavoritesScreen(mount, scholarships, rerenderApp) {
   function openDetails(item) {
@@ -64,7 +65,7 @@ export function renderFavoritesScreen(mount, scholarships, rerenderApp) {
       <div class="panel-header">
         <p class="panel-title">Favorites</p>
       </div>
-      <div class="panel-body">
+      <div class="panel-body" id="favPanelBtns">
         <button class="btn secondary" id="clearFavs">Clear favorites</button>
       </div>
     `;
@@ -74,6 +75,15 @@ export function renderFavoritesScreen(mount, scholarships, rerenderApp) {
 
     const favIds = new Set(getFavorites());
     const favItems = scholarships.filter((s) => favIds.has(s.id));
+
+    // Add export button to the sidebar
+    const exportBtn = FavoritesExportButton({
+      items: favItems,
+      filenamePrefix: 'scholarship_favorites',
+      label: 'Export favorites (CSV)'
+    });
+
+left.querySelector('.panel-body').appendChild(exportBtn);
 
     // (NEW) progress check at the top of the favorites screen
     const progress = ProgressCheck({

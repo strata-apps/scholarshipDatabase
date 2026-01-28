@@ -5,11 +5,19 @@ import { renderFavoritesScreen } from './screens/favorites.js';
 import { getFavorites } from './components/storage.js';
 
 import renderLoginScreen from './screens/login.js';
-import { isAuthed, getSession, clearSession } from './components/auth.js';
+import { isAuthed, getSession, clearSession, onAuthChange, setSessionFromSupabase } from './components/auth.js';
+
+import { renderDashboardScreen } from './screens/dashboard.js';
+
+
 
 const app = document.getElementById('app');
 
+await setSessionFromSupabase(); // prime local cache on load
+onAuthChange(() => route());    // reroute on login/logout/refresh
+
 let scholarshipsCache = null;
+
 
 /* ------------------------------
    Filters drawer “chrome”
@@ -73,7 +81,7 @@ function route() {
 
   // If authed and they go to login, send them to board
   if (authed && base === '#/login') {
-    safeRedirect('#/board');
+    safeRedirect('#/dashboard');
     return;
   }
 
@@ -104,13 +112,15 @@ function route() {
 
   (async () => {
     if (base === '#/login') {
-      renderLoginScreen(mount, () => safeRedirect('#/board'));
+      renderLoginScreen(mount, () => safeRedirect('#/dashboard'));
       return;
     }
 
     const scholarships = await ensureData();
 
-    if (base === '#/favorites') {
+    if (base === '#/dashboard') {
+      renderDashboardScreen(mount, scholarships, () => route());
+    } else if (base === '#/favorites') {
       renderFavoritesScreen(mount, scholarships, () => route());
     } else {
       loadScholarships(mount, scholarships, () => route());

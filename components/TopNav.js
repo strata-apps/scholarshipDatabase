@@ -1,4 +1,4 @@
-export function TopNav({ active = '#/board', favoritesCount = 0 }) {
+export function TopNav({ active = '#/board', favoritesCount = 0, onLogout }) {
   const wrap = document.createElement('div');
   wrap.className = 'topnav';
 
@@ -10,8 +10,16 @@ export function TopNav({ active = '#/board', favoritesCount = 0 }) {
   brand.href = '#/board';
   brand.innerHTML = `<div class="brand-badge"></div><div>The Scholarship Database</div>`;
 
+  const right = document.createElement('div');
+  right.className = 'topnav-right';
+
   const links = document.createElement('div');
   links.className = 'navlinks';
+
+  const dash = document.createElement('a');
+  dash.className = 'navlink' + (active === '#/dashboard' ? ' active' : '');
+  dash.href = '#/dashboard';
+  dash.textContent = 'Dashboard';
 
   const board = document.createElement('a');
   board.className = 'navlink' + (active === '#/board' ? ' active' : '');
@@ -27,12 +35,25 @@ export function TopNav({ active = '#/board', favoritesCount = 0 }) {
   pill.className = 'pill';
   pill.innerHTML = `❤️ <span>${favoritesCount}</span> <small>saved</small>`;
 
+  links.appendChild(dash);
   links.appendChild(board);
   links.appendChild(fav);
   links.appendChild(pill);
 
+  right.appendChild(links);
+
+  // ✅ Logout button
+  if (typeof onLogout === 'function') {
+    const logoutBtn = document.createElement('button');
+    logoutBtn.type = 'button';
+    logoutBtn.className = 'btn secondary logout-btn';
+    logoutBtn.textContent = 'Log out';
+    logoutBtn.addEventListener('click', onLogout);
+    right.appendChild(logoutBtn);
+  }
+
   inner.appendChild(brand);
-  inner.appendChild(links);
+  inner.appendChild(right);
   wrap.appendChild(inner);
   return wrap;
 }
