@@ -29,11 +29,11 @@ export function DeadlinesWithinWeek({
 
   const title = document.createElement('div');
   title.className = 'card-title';
-  title.textContent = 'Deadlines Within 7 Days';
+  title.textContent = 'Schoarships that Close Soon!';
 
   const sub = document.createElement('div');
   sub.className = 'card-sub';
-  sub.textContent = 'Based on closeDate in scholarships.json';
+  sub.textContent = '';
 
   top.appendChild(title);
   top.appendChild(sub);
