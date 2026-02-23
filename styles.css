@@ -1,0 +1,817 @@
+/* =========================================================
+   styles.css — Paper / Offset Shadow Theme
+   (First stylesheet structure + second stylesheet styling)
+   ========================================================= */
+
+/*@import url('https://fonts.googleapis.com/css?family=Fjalla+One&display=swap'); Original*/
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+ /* Camp Cat Branding */
+
+:root {
+  /* Paper theme tokens */
+  --paper-bg: #f8f4e5;
+  --ink: #2A293E;
+  --muted: rgba(42,41,62,0.72);
+  
+  /* Branding Aligned with Camp Catanese Foundation Pallete */
+  --shadow-accent: #1BB34B; /* Original Orange Shade: #ffa580 */
+  --primary-accent: #14519F; /* Original Purple Shade: #95a4ff */
+  --secondary-accent: #14519F; /* Original Pink Shade: #ffc8ff */
+
+  --line-strong: #000;
+  --line-soft: rgba(0,0,0,0.25);
+
+  --shadow-main: 15px 15px 1px var(--shadow-accent),
+                 15px 15px 1px 2px var(--line-strong);
+  --shadow-alt: 12px 12px 1px var(--primary-accent),
+                12px 12px 1px 2px var(--line-strong);
+
+  /* Spacing scale */
+  --space-xxs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+}
+
+/* ---------------------------------------------------------
+   Global
+--------------------------------------------------------- */
+
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Poppins', system-ui, sans-serif;
+  color: var(--ink);
+  background:
+    url("/components/assets/backdrop/backdrop.png")
+    center / cover no-repeat fixed;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::selection {
+  background: var(--secondary-accent);
+}
+
+/* ---------------------------------------------------------
+   App Shell
+--------------------------------------------------------- */
+
+.shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------------------------------------------------------
+   Top Navigation
+--------------------------------------------------------- */
+
+.topnav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(248,244,229,0.9);
+  border-bottom: 2px solid var(--line-strong);
+}
+
+.topnav-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-logo {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+
+.navlinks {
+  margin-left: auto;
+  display: flex;
+  gap: 10px;
+}
+
+.navlink {
+  padding: 8px 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  border: 2px solid transparent;
+}
+
+.navlink.active {
+  border-color: var(--line-strong);
+  background: rgba(0,0,0,0.05);
+  box-shadow: 3px 3px 1px var(--primary-accent),
+              3px 3px 1px 2px var(--line-strong);
+}
+
+/* ---------------------------------------------------------
+   Layout
+--------------------------------------------------------- */
+
+.page {
+  max-width: 1280px;
+  margin: 18px auto 28px;
+  padding: 0 16px;
+  display: grid;
+  grid-template-columns: 290px 1fr;
+  gap: var(--space-xl); 
+}
+
+@media (max-width: 980px) {
+  .page {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Single-column pages (Dashboard, Login, etc.) */
+.page.page--single{
+  grid-template-columns: 1fr;
+}
+
+/* ---------------------------------------------------------
+   Panels
+--------------------------------------------------------- */
+
+.panel {
+  background: var(--paper-bg);
+  border: 2px solid var(--line-strong);
+  box-shadow: var(--shadow-main);
+  margin-bottom: var(--space-lg);
+}
+
+.panel-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+
+.panel-header {
+  padding: 14px;
+  border-bottom: 2px solid var(--line-strong);
+}
+
+.panel-title {
+  margin: 0;
+  font-size: 14px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.panel-sub {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.panel-body {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ---------------------------------------------------------
+   Inputs
+--------------------------------------------------------- */
+
+label {
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-weight: 900;
+}
+
+.input,
+select {
+  width: 100%;
+  background: var(--paper-bg);
+  border: none;
+  border-bottom: 5px solid var(--line-strong);
+  padding: 8px 6px;
+  font-family: inherit;
+}
+
+.input:focus,
+select:focus {
+  outline: none;
+  border-bottom-color: var(--shadow-accent);
+}
+
+/* ---------------------------------------------------------
+   Buttons
+--------------------------------------------------------- */
+
+.btn {
+  background: var(--shadow-accent);
+  border: 2px solid var(--line-strong);
+  padding: 10px 14px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 3px 3px 1px var(--primary-accent),
+              3px 3px 1px 2px var(--line-strong);
+  transition: 0.2s;
+}
+
+.btn:hover {
+  background: var(--line-strong);
+  color: #ffff;
+}
+
+.btn.secondary {
+  background: var(--paper-bg);
+  box-shadow: 3px 3px 1px var(--secondary-accent),
+              3px 3px 1px 2px var(--line-strong);
+}
+
+/* ---------------------------------------------------------
+   Grid + Cards
+--------------------------------------------------------- */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-lg);
+}
+
+@media (max-width: 1000px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .grid { grid-template-columns: 1fr; }
+}
+
+.card {
+  background: var(--paper-bg);
+  border: 2px solid var(--line-strong);
+  box-shadow: var(--shadow-alt);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  transition: 0.2s;
+  padding: var(--space-md);
+}
+
+.card-top {
+  margin-bottom: var(--space-sm);
+}
+
+.card-mid {
+  margin-bottom: var(--space-sm);
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-main);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.card-sub {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+/* ---------------------------------------------------------
+   Badges
+--------------------------------------------------------- */
+
+.badge {
+  display: inline-block;
+  padding: 6px 10px;
+  border: 1px solid rgba(0,0,0,0.25);
+  background: rgba(0,0,0,0.04);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* ---------------------------------------------------------
+   Modal
+--------------------------------------------------------- */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal {
+  background: var(--paper-bg);
+  border: 2px solid var(--line-strong);
+  box-shadow: var(--shadow-main);
+  max-width: 820px;
+  width: 100%;
+}
+
+.modal-header {
+  padding: 14px;
+  border-bottom: 2px solid var(--line-strong);
+}
+
+.modal-body {
+  padding: 16px;
+}
+
+.kpi { 
+  gap: var(--space-xl); 
+}
+
+/* =========================================================
+   Mobile Filters Drawer
+   - Hidden by default on small screens
+   - Opens via body.filters-open
+   ========================================================= */
+
+/* A row in panel header so title and X can sit together */
+.panel-header-row{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap: var(--space-sm);
+}
+
+/* Toggle button you’ll place in the toolbar/topbar */
+.filters-toggle{
+  display:none; /* shown on mobile via media query below */
+}
+
+/* Overlay (only appears on mobile when open) */
+.filters-overlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 80;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+/* When filters open: enable overlay */
+body.filters-open .filters-overlay{
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Make the filters panel a drawer on small screens */
+@media (max-width: 980px){
+  .filters-toggle{
+    display:inline-flex;
+    align-items:center;
+    gap: 8px;
+  }
+
+  /* Drawer positioning */
+  .filters-panel{
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: min(92vw, 380px);
+    z-index: 90;
+
+    transform: translateX(-110%);
+    transition: transform 0.22s ease;
+
+    margin: 0;
+    overflow-y: auto;
+  }
+
+  /* Open state */
+  body.filters-open .filters-panel{
+    transform: translateX(0);
+  }
+
+  /* Close button only matters on mobile; show it */
+  .filters-close{
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border: 2px solid var(--line-strong);
+    background: var(--paper-bg);
+    box-shadow: 2px 2px 0 var(--secondary-accent);
+    cursor: pointer;
+  }
+}
+
+/* On desktop, hide the close button (not needed) */
+@media (min-width: 981px){
+  .filters-close{ display:none; }
+}
+
+/* Optional: mobile filters button position */
+.filters-toggle{
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 95;
+}
+
+@media (min-width: 981px){
+  .filters-toggle{ display:none; }
+}
+
+/* ---------------------------------------------------------
+   Modal (Scrollable + Compact)
+--------------------------------------------------------- */
+
+.modal-overlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 100;
+
+  /* Allow the page to scroll if modal is tall on small screens */
+  overflow: auto;
+
+  /* Top align on small screens; centered on larger */
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+
+  padding: var(--space-lg);
+}
+
+@media (min-width: 700px){
+  .modal-overlay{
+    align-items: center;
+  }
+}
+
+.modal{
+  background: var(--paper-bg);
+  border: 2px solid var(--line-strong);
+  box-shadow: var(--shadow-main);
+  width: min(820px, 100%);
+
+  /* KEY: keep modal readable + scrollable */
+  max-height: calc(100vh - (var(--space-lg) * 2));
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header{
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 2px solid var(--line-strong);
+
+  /* Sticky header so close button stays visible while scrolling */
+  position: sticky;
+  top: 0;
+  background: var(--paper-bg);
+  z-index: 1;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
+.modal-title{
+  margin: 0;
+  font-size: 16px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  line-height: 1.15;
+}
+
+/* Body becomes the scrolling region */
+.modal-body{
+  padding: 0;               /* move padding into .modal-content */
+  overflow: auto;         /* scroll is inside .modal-content */
+  flex: 1;                  /* take remaining height */
+  min-height: 0;            /* IMPORTANT for nested scroll containers */
+  -webkit-overflow-scrolling: touch;
+  margin-left: 20px;
+  margin-bottom: 20px;
+}
+
+/* This wrapper scrolls */
+.modal-content{
+  padding: var(--space-md);
+  overflow-y: auto;
+  max-height: 100%;
+}
+
+/* Make content inside modal tighter + more readable */
+.modal-content p{
+  margin: 0 0 var(--space-xs);
+  line-height: 1.35;
+}
+
+.modal-content h1,
+.modal-content h2,
+.modal-content h3,
+.modal-content h4{
+  margin: 0 0 var(--space-xs);
+  line-height: 1.2;
+}
+
+.modal-content hr{
+  margin: var(--space-sm) 0;
+}
+
+.modal-content .kv{
+  padding: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+/* If you use a grid inside modal, tighten it */
+.modal-content .modal-grid,
+.modal-content .grid,
+.modal-content .details-grid{
+  gap: var(--space-sm);
+}
+
+/* Optional: tighten badges/chips inside modal */
+.modal-content .badge{
+  padding: 4px 8px;
+}
+
+.modal-overlay{
+  /* keep your existing properties... */
+  /* add these: */
+  overscroll-behavior: contain; /* prevents scroll chaining on mobile */
+}
+
+body.modal-open{
+  overflow: hidden;
+}
+
+/* =========================================================
+   Favorites: Goal Tracker (ProgressCheck) + StatusButton
+   ========================================================= */
+
+.pc.card{
+  padding: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.pc-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.pc-title{
+  font-size: 14px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-weight: 900;
+}
+
+.pc-controls{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content:flex-end;
+}
+
+.pc-pill{
+  display:inline-block;
+  padding: 6px 10px;
+  border: 2px solid var(--line-strong);
+  background: rgba(0,0,0,0.04);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  box-shadow: 2px 2px 0 var(--secondary-accent);
+}
+
+.pc-sub{
+  margin: 0 0 var(--space-sm);
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.2px;
+}
+
+.pc-goal-select{
+  width: auto;
+  min-width: 190px;
+  border: 2px solid var(--line-strong);
+  box-shadow: 2px 2px 0 var(--primary-accent);
+  padding: 8px 10px;
+  background: var(--paper-bg);
+}
+
+.pc-bar{
+  position: relative;
+  height: 18px;
+  border: 2px solid var(--line-strong);
+  background: rgba(0,0,0,0.05);
+  box-shadow: 3px 3px 1px var(--shadow-accent),
+              3px 3px 1px 2px var(--line-strong);
+  overflow: hidden;
+}
+
+.pc-fill{
+  position:absolute;
+  left:0; top:0; bottom:0;
+  width:0%;
+  transition: width 0.25s ease;
+}
+
+.pc-fill--purple{
+  background: #7C3AED; /* purple */
+}
+
+.pc-fill--green{
+  background: #16A34A; /* green */
+  opacity: 0.95;
+}
+
+.pc-stats{
+  margin-top: var(--space-sm);
+  display:flex;
+  flex-direction:column;
+  gap: 6px;
+}
+
+.pc-row{
+  display:flex;
+  align-items:center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.pc-row--muted{
+  color: var(--muted);
+}
+
+.pc-dot{
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--line-strong);
+  display:inline-block;
+  box-shadow: 1px 1px 0 var(--secondary-accent);
+}
+
+.pc-dot--purple{ background:#7C3AED; }
+.pc-dot--green{ background:#16A34A; }
+
+.pc-note{
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* Status button */
+.sb{
+  display:inline-flex;
+  align-items:center;
+}
+
+.sb-select{
+  width: auto;
+  border: 2px solid var(--line-strong);
+  padding: 8px 10px;
+  background: var(--paper-bg);
+  box-shadow: 2px 2px 0 var(--primary-accent);
+}
+
+.sb--applied .sb-select{
+  box-shadow: 2px 2px 0 var(--primary-accent);
+}
+
+.sb--received .sb-select{
+  box-shadow: 2px 2px 0 #16A34A;
+}
+
+.sb--denied .sb-select{
+  box-shadow: 2px 2px 0 #EF4444;
+}
+
+/* Card footer row on favorites */
+.fav-actions{
+  margin-top: var(--space-sm);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Auth page tweaks */
+.page[style*="grid-template-columns: 1fr"]{
+  margin-top: 28px;
+}
+
+.panel form{
+  display:flex;
+  flex-direction:column;
+  gap: 12px;
+}
+.topnav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.topnav-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.navlinks {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logout-btn {
+  white-space: nowrap;
+}
+
+
+/* ------------------------------
+   Dashboard layout
+--------------------------------*/
+
+.dashboard-wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 22px 18px 44px;
+}
+
+.dashboard-kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 420px);
+  gap: 22px;
+  align-items: start;
+}
+
+.dashboard-col {
+  display: grid;
+  gap: 18px;
+}
+
+/* A shared helper for scrollable dashboard sections */
+.dashboard-scroll {
+  scrollbar-gutter: stable;
+}
+
+@media (max-width: 900px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+ /* Login Logo */
+
+.login-logo {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+  margin-bottom: 12px;
+  border-radius: 16px;
+}
+
+
