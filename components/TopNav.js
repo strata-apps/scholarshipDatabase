@@ -9,7 +9,7 @@ export function TopNav({ active = '#/board', favoritesCount = 0, onLogout }) {
   brand.className = 'brand';
   brand.href = '#/board';
   brand.innerHTML = `
-    <img src="/components/assets/logo/logo.png" alt="Camp Catanese Logo" class="brand-logo" />
+    <img src="./components/assets/logo/logo.png" alt="Camp Catanese Logo" class="brand-logo" />
     <div>Camp Catanese Scholarship Database</div>
   `;
 
