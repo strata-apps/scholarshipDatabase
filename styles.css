@@ -51,7 +51,7 @@ body {
   font-family: 'Poppins', system-ui, sans-serif;
   color: var(--ink);
   background:
-    url("/components/assets/backdrop/backdrop.png")
+    url("./components/assets/backdrop/backdrop.png")
     center / cover no-repeat fixed;
 }
 
