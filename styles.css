@@ -807,8 +807,8 @@ body.modal-open{
  /* Login Logo */
 
 .login-logo {
-  width: 90px;
-  height: 90px;
+  width: 180px;
+  height: 180px;
   object-fit: contain;
   margin-bottom: 12px;
   border-radius: 16px;

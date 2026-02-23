@@ -223,7 +223,7 @@ export default function renderLoginScreen(mount, onAuthed) {
 
         // ✅ Logo image
         el('img', {
-          src: '/components/assets/logo/logo.png',
+          src: './components/assets/logo/logo.png',
           alt: 'Camp Catanese Logo',
           class: 'login-logo'
         }),
