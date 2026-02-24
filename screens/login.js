@@ -171,7 +171,7 @@ export default function renderLoginScreen(mount, onAuthed) {
         el('input', {
           class: 'input',
           value: state.first_name,
-          placeholder: 'Darian',
+          placeholder: 'First Name',
           oninput: (e) => { state.first_name = e.target.value; }
         })
       ),
@@ -180,7 +180,7 @@ export default function renderLoginScreen(mount, onAuthed) {
         el('input', {
           class: 'input',
           value: state.last_name,
-          placeholder: 'Benitez Sanchez',
+          placeholder: 'Last Name',
           oninput: (e) => { state.last_name = e.target.value; }
         })
       ),
@@ -190,7 +190,7 @@ export default function renderLoginScreen(mount, onAuthed) {
           class: 'input',
           type: 'email',
           value: state.reg_email,
-          placeholder: 'you@campcatanese.org',
+          placeholder: 'you@gmail.org',
           oninput: (e) => { state.reg_email = e.target.value; }
         })
       ),
